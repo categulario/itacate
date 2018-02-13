@@ -25,6 +25,7 @@ Cómo usar / Usage
 
 .. code-block:: python
 
+   # module.py
    from itacate import Config
    import os
 
