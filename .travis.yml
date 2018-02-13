@@ -12,8 +12,6 @@ matrix:
       env: TOXENV=py,codecov
     - python: 3.4
       env: TOXENV=py,codecov
-    - python: 2.7
-      env: TOXENV=py,simplejson,devel,lowest,codecov
     - python: pypy
       env: TOXENV=py,codecov
     - python: nightly
@@ -32,7 +30,7 @@ matrix:
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
       brew update;
-      brew install python3 redis memcached;
+      brew install python3;
       virtualenv -p python3 ~/py-env;
       . ~/py-env/bin/activate;
     fi
@@ -50,6 +48,3 @@ branches:
   only:
     - master
     - /^.*-maintenance$/
-
-notifications:
-  email: false
