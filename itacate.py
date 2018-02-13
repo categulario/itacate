@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-    flask.config
-    ~~~~~~~~~~~~
+    Itacate
+    ~~~~~~~
 
     Implements the configuration related objects.
 
@@ -13,25 +13,61 @@ import os
 import types
 import errno
 import json
+import sys
 
 
-class ConfigAttribute(object):
-    """Makes an attribute forward to the config"""
+# from werkzeug._compat:135
+def reraise(tp, value, tb=None):
+    if value.__traceback__ is not tb:
+        raise value.with_traceback(tb)
+    raise value
 
-    def __init__(self, name, get_converter=None):
-        self.__name__ = name
-        self.get_converter = get_converter
+# from werkzeug.utils:399
+def import_string(import_name, silent=False):
+    """Imports an object based on a string.  This is useful if you want to
+    use import paths as endpoints or something similar.  An import path can
+    be specified either in dotted notation (``xml.sax.saxutils.escape``)
+    or with a colon as object delimiter (``xml.sax.saxutils:escape``).
 
-    def __get__(self, obj, type=None):
-        if obj is None:
-            return self
-        rv = obj.config[self.__name__]
-        if self.get_converter is not None:
-            rv = self.get_converter(rv)
-        return rv
+    If `silent` is True the return value will be `None` if the import fails.
 
-    def __set__(self, obj, value):
-        obj.config[self.__name__] = value
+    :param import_name: the dotted name for the object to import.
+    :param silent: if set to `True` import errors are ignored and
+                   `None` is returned instead.
+    :return: imported object
+    """
+    # force the import name to automatically convert to strings
+    # __import__ is not able to handle unicode strings in the fromlist
+    # if the module is a package
+    import_name = str(import_name).replace(':', '.')
+    try:
+        try:
+            __import__(import_name)
+        except ImportError:
+            if '.' not in import_name:
+                raise
+        else:
+            return sys.modules[import_name]
+
+        module_name, obj_name = import_name.rsplit('.', 1)
+        try:
+            module = __import__(module_name, None, None, [obj_name])
+        except ImportError:
+            # support importing modules not yet set up by the parent module
+            # (or package for that matter)
+            module = import_string(module_name)
+
+        try:
+            return getattr(module, obj_name)
+        except AttributeError as e:
+            raise ImportError(e)
+
+    except ImportError as e:
+        if not silent:
+            reraise(
+                ImportStringError,
+                ImportStringError(import_name, e),
+                sys.exc_info()[2])
 
 
 class Config(dict):
@@ -41,7 +77,7 @@ class Config(dict):
 
     Either you can fill the config from a config file::
 
-        app.config.from_pyfile('yourconfig.cfg')
+        config.from_pyfile('yourconfig.cfg')
 
     Or alternatively you can define the configuration options in the
     module that calls :meth:`from_object` or provide an import path to
@@ -163,6 +199,8 @@ class Config(dict):
 
         :param obj: an import name or object
         """
+        if isinstance(obj, str):
+            obj = import_string(obj)
         for key in dir(obj):
             if key.isupper():
                 self[key] = getattr(obj, key)

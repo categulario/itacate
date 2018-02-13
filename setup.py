@@ -9,7 +9,7 @@ with io.open('README.rst', 'rt', encoding='utf8') as f:
 
 setup(
     name='itacate',
-    version='1.0.1',
+    version='1.0.3',
     url='https://github.com/categulario/itacate',
     license='BSD',
     author='Abraham Toriz Cruz',

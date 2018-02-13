@@ -30,6 +30,12 @@ def test_config_from_file():
     common_object_test(config)
 
 
+def test_config_from_object():
+    config = itacate.Config(__name__)
+    config.from_object(__name__)
+    common_object_test(config)
+
+
 def test_config_from_json():
     config = itacate.Config(__name__)
     current_dir = os.path.dirname(os.path.abspath(__file__))
