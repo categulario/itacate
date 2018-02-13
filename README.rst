@@ -1,7 +1,8 @@
 Itacate
 =======
 
-[![Build Status](https://travis-ci.org/categulario/itacate.svg?branch=master)](https://travis-ci.org/categulario/itacate)
+.. image:: https://travis-ci.org/categulario/itacate.svg?branch=master
+    :target: https://travis-ci.org/categulario/itacate
 
 *Itacatl: Provisión de comida que se lleva para un viaje o un paseo, o que ha sobrado de una fiesta y se da a algunos invitados.*
 
