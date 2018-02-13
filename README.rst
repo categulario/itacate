@@ -1,6 +1,8 @@
 Itacate
 =======
 
+[![Build Status](https://travis-ci.org/categulario/itacate.svg?branch=master)](https://travis-ci.org/categulario/itacate)
+
 *Itacatl: Provisión de comida que se lleva para un viaje o un paseo, o que ha sobrado de una fiesta y se da a algunos invitados.*
 
 El módulo de configuración de flask para el resto del mundo, por que me gusta cómo funciona. Escribe tus configuraciones en archivos python e impórtalas según el entorno, sobreescribiéndolas en cascada.
