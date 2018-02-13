@@ -16,7 +16,7 @@ setup(
     author_email='awonderfulcode@gmail.com',
     description='Configuration module from flask, for the rest of the world',
     long_description=readme,
-    packages=[],
+    py_modules=['itacate'],
     platforms='any',
     install_requires=[],
     extras_require={
