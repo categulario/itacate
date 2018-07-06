@@ -1,48 +1,46 @@
 os: linux
 sudo: false
 language: python
-
 matrix:
   include:
-    - python: 3.6
-      env: TOXENV=py
-    - python: 3.5
-      env: TOXENV=py
-    - python: 3.4
-      env: TOXENV=py
-    - python: pypy
-      env: TOXENV=py
-    - python: nightly
-      env: TOXENV=py
-    - os: osx
-      language: generic
-      env: TOXENV=py
+  - python: 3.6
+    env: TOXENV=py
+  - python: 3.5
+    env: TOXENV=py
+  - python: 3.4
+    env: TOXENV=py
+  - python: pypy
+    env: TOXENV=py
+  - python: nightly
+    env: TOXENV=py
+  - os: osx
+    language: generic
+    env: TOXENV=py
   allow_failures:
-    - python: nightly
-      env: TOXENV=py
-    - os: osx
-      language: generic
-      env: TOXENV=py
+  - python: nightly
+    env: TOXENV=py
+  - os: osx
+    language: generic
+    env: TOXENV=py
   fast_finish: true
-
 before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-      brew update;
-      brew install python3;
-      virtualenv -p python3 ~/py-env;
-      . ~/py-env/bin/activate;
-    fi
-
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; brew install python3; virtualenv
+  -p python3 ~/py-env; . ~/py-env/bin/activate; fi
 install:
-  - pip install tox
-
+- pip install tox
 script:
-  - tox
-
+- tox
 cache:
-  - pip
-
+- pip
 branches:
   only:
-    - master
-    - /^.*-maintenance$/
+  - master
+  - "/^.*-maintenance$/"
+deploy:
+  provider: pypi
+  user: categulario
+  on:
+    tags: true
+  distributions: sdist bdist_wheel
+  password:
+    secure: vQ9xfA6fNo3zXpsDAwO3OeXsiIokdTtiO0FScG9lhWyOCXwt96SbbtTsvQ1rRDTMWFvMGchnSZmU/01uiighnU5I3m20jhIutRRFTjNekkJdJRU8FunAhu/5LaFWTbY54YA8RS1ymK8/VTZJEcVBPQVqh2zQEdkeXlBnxftQkoM7KOZOAYFwBmQZAr+mID9T2LNEE4jfQ40jcC0DHdyxPsT5XAvmthPRDNTPGHzHDv5XE4LMsYs14Hwt7kK0OmIdVI9uq9ViB83g9ufqRKp0S3rP8lWWrBlm5nhyiG4eHIPotQElYadc5mML9dkGDDEzgaWcayyUKYZ0wYGXfiQ2eWpPSAeu+yOl9UzyLOhABj7yFb2SJDzJc3OdgaYI0SThnyyu243axnGYfrJVJDzL7ENw5mQY5H0EPLgoLWqS+W6Sa2PbTu1w6utX1UjEoJVySaRNUNVxgvSoOLmHRdOoAfklyQZHvTcKmqQi3MSZy6zokhBDJnYn7aX+ZK4rGH1W0EvR6VU/HGuW/YVCeFhQIEvUs+onQQ/7V3/sI4e5JgDzLzceTqo6FqT/wTKn478AKwAI0S05R6vcwdEvQwbdD+St2YQQppRLCm5vBD7kUdwlxM4QLWmKBIoPl/apn8lf8zcKiJt70SA+j3vP5d4mC7t1w0eYWPWpdTbTOq6Jf2o=
